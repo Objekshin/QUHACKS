@@ -1,3 +1,5 @@
+
+
 /*
  * Decompiled with CFR 0_118.
  */
@@ -18,15 +20,7 @@ import java.awt.Image;
 import java.awt.Polygon;
 import java.awt.event.KeyListener;
 import java.awt.image.ImageObserver;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Scanner;
-
 import javax.swing.JPanel;
 
 public class Game
@@ -58,7 +52,6 @@ implements Runnable {
     private boolean isOver;
     private String name;
     private String gameMode;
-    private boolean leaderSet = false;
 
     public Game(String playerName, String mode) {
         this.setBackground(new Color(0, 191, 255));
@@ -68,7 +61,6 @@ implements Runnable {
         this.addKeyListener(this.keyboard);
         this.player = new Player(0, 0, "crab1.png", mode);
         name = playerName;
-        gameMode = mode;
         this.fish1 = new Fish(700, 200, 1, true);
         this.fish2 = new Fish(700, 400, 2, false);
         this.isOver = false;
@@ -132,7 +124,7 @@ implements Runnable {
             g.setColor(new Color(0, 0, 0, this.time));
             g.fillRect(-1000, -1000, 9000, 9000);
             //if (this.time > 250) {
-            	g.drawImage(ImgLoader.loadImage("Screenshot.png"), 0, 0, 1600, 800, null);
+            	g.drawImage(ImgLoader.loadImage("harbor.jpg"), 0, 0, 1600, 800, null);
             //}
             g.setColor(new Color(255, 0, 0, this.time));
             g.drawString("The trash has filled the chesapeake bay, ", 50, 300);
@@ -142,18 +134,12 @@ implements Runnable {
         	 //g.setColor(new Color(0, 0, 0, this.time));
              //g.fillRect(-1000, -1000, 9000, 9000);
              //if (this.time > 250) {
-             	g.drawImage(ImgLoader.loadImage("Screenshot.png"), 0, 0, 1600, 800, null);
+             	g.drawImage(ImgLoader.loadImage("harbor.jpg"), 0, 0, 1600, 800, null);
              //}
              //g.setColor(new Color(255, 0, 0, this.time));
              g.drawString("The trash has filled the chesapeake bay, ", 50, 300);
              g.drawString("killing the wild life", 50, 340);
              g.drawString("You Could have fixed this by recycling", 280, 650);
-             if (!leaderSet) {
-            	 this.highScores();
-            	 displayLB();
-            	 leaderSet = true;
-             }
-             
             /*g.setColor(new Color(0, 0, 0));
             g.fillRect(-1000, -1000, 9000, 9000);*/
             /*g.setColor(new Color(255, 0, 0, this.time));
@@ -200,11 +186,11 @@ implements Runnable {
         g.drawImage(ImgLoader.loadImage("cloud.png"), 750, -480, null);
         g.drawImage(ImgLoader.loadImage("cloud.png"), 840, -560, null);
         g.drawImage(ImgLoader.loadImage("cloud.png"), 1500, -530, null);
-        g.drawImage(ImgLoader.loadImage("cloud.png"), 1300, -410, null);
+        //g.drawImage(ImgLoader.loadImage("cloud.png"), 1300, -410, null);
         g.drawImage(ImgLoader.loadImage("cloud.png"), 1579, -480, null);
         g.drawImage(ImgLoader.loadImage("cloud.png"), 1700, -600, null);
         g.drawImage(ImgLoader.loadImage("cloud.png"), 1200, -530, null);
-        g.drawImage(ImgLoader.loadImage("cloud.png"), 1250, -410, null);
+      //  g.drawImage(ImgLoader.loadImage("cloud.png"), 1250, -410, null);
         g.drawImage(ImgLoader.loadImage("cloud.png"), 1879, -480, null);
         g.drawImage(ImgLoader.loadImage("cloud.png"), 1800, -420, null);
         g.drawImage(ImgLoader.loadImage("starfish.png"), 1800, 320, null);
@@ -238,6 +224,17 @@ implements Runnable {
         g2d.drawImage(ImgLoader.loadImage("seaweed_tall.png"), 640, 255, null);
         g2d.drawImage(ImgLoader.loadImage("seaweed_tall.png"), 1028, 255, null);
         g2d.drawImage(ImgLoader.loadImage("seashell.png"), 0, 280, null);
+		g2d.drawImage(ImgLoader.loadImage("sand1.png"), -700, 385, null);
+		g2d.drawImage(ImgLoader.loadImage("sand2.png"), -200, 385, null);
+		
+		
+
+		g2d.drawImage(ImgLoader.loadImage("sandy.png"), 700, 585, null);
+		g2d.drawImage(ImgLoader.loadImage("sandy.png"), 200, 485, null);
+
+		g2d.drawImage(ImgLoader.loadImage("sandy.png"), 1700, 385, null);
+		g2d.drawImage(ImgLoader.loadImage("sandy.png"), 1200, 685, null);
+
         this.fish2.draw(g2d);
     }
 
@@ -330,63 +327,6 @@ implements Runnable {
             }
         }
     }
-    
-    public void highScores() {
-    	setScore(gameMode);
-    	String nameMode = name + "\n";
-    	String theMode = gameMode + "\n";
-    	String theScore = "" + score + "\n";
-    	try {
-    	    Files.write(Paths.get("./res/leaderboard.txt"), nameMode.getBytes(), StandardOpenOption.APPEND);
-    	    Files.write(Paths.get("./res/scores.txt"), theScore.getBytes(), StandardOpenOption.APPEND);
-    	    Files.write(Paths.get("./res/modes.txt"), theMode.getBytes(), StandardOpenOption.APPEND);
-    	}catch (IOException e) {
-    	    //exception handling left as an exercise for the reader
-    	}
-    }
-    
-    public void displayLB() {
-    	new LeaderBoard(returnList("./res/leaderboard.txt"),returnList("./res/scores.txt"), returnList("./res/modes.txt")).setVisible(true);;
-    }
-    
-    public ArrayList <String> returnList(String filePath){
-		int counter = 0;
-		ArrayList <String> people = new ArrayList();
-		try {
-			Scanner input = new Scanner(System.in);
-			File file = new File(filePath);
-			input = new Scanner(file);
-
-			while (input.hasNextLine()) {
-				counter++;
-				name = input.nextLine();
-				people.add(name);
-			}
-			input.close();
-
-		} catch (Exception ex) {
-			System.out.println("Didn't find file.");
-		}
-		return people;
-	}
-    
-    private void setScore(String mode){
-    	switch(mode){
-    	case PlayerName.EASY: score /= 2;
-    	break;
-    	
-    	case PlayerName.HYPER: score /= 10;
-    	break;
-    	
-    	case PlayerName.HARD: score /= 1;
-    	break;
-    	
-    	case PlayerName.MASTER: score *= 3;
-    	break;
-    	
-    	default: score *= 1;
-    	}
-    	
-    }
 }
+
 

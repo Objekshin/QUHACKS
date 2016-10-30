@@ -44,10 +44,10 @@ public class Player {
         this.y = y;
         this.image = true;
         this.hasTrash = false;
-        this.sprite = ImgLoader.loadImage("crab1.png");
-        this.sprite1 = ImgLoader.loadImage("crab2.png");
-        this.sprite2 = ImgLoader.loadImage("crab1_reverse.png");
-        this.sprite3 = ImgLoader.loadImage("crab2_reverse.png");
+        this.sprite = ImgLoader.loadImage("crab1A.png");
+        this.sprite1 = ImgLoader.loadImage("crab2A.png");
+        this.sprite2 = ImgLoader.loadImage("crab1A_reverse.png");
+        this.sprite3 = ImgLoader.loadImage("crab2A_reverse.png");
         this.current = this.sprite;
         setSpeed(mode);
     }
@@ -150,4 +150,5 @@ public class Player {
         g2d.drawImage(op.filter(image, null), this.x, this.y, null);
     }
 }
+
 

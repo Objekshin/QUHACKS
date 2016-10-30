@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0_118.
- */
+
 package Entity;
 
 import Tools.ImgLoader;
